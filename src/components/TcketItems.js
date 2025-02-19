@@ -22,7 +22,7 @@ export default function TicketItem({ ticket, dispath }) {
       </button>
       <button
         className="button"
-        onClick={() => dispath({ type: "EDIT_TICKET", payload: { id } })}
+        onClick={() => dispath({ type: "SET_EDITING_TICKET", payload: ticket })}
       >
         Edit
       </button>
