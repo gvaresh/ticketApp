@@ -1,3 +1,4 @@
+import { type } from "@testing-library/user-event/dist/type";
 import React, { useState, useEffect } from "react";
 export default function TicketForm({ dispatch, editingTicket }) {
   const [title, setTitle] = useState("");
@@ -23,6 +24,11 @@ export default function TicketForm({ dispatch, editingTicket }) {
     setTitle("");
     setDescription("");
     setPriority("1");
+  };
+
+  const handleCancelButton = () => {
+    dispatch({ type: "CLEAR_EDITING_TICKET" });
+    clearForm();
   };
 
   const handleSubmit = e => {
@@ -79,6 +85,12 @@ export default function TicketForm({ dispatch, editingTicket }) {
       <button type="submit" className="button">
         Submit
       </button>
+
+      {editingTicket && (
+        <button className="button" onClick={handleCancelButton}>
+          Cancel
+        </button>
+      )}
     </form>
   );
 }
