@@ -1,4 +1,4 @@
-import logo from "./logo.svg";
+// import logo from "./logo.svg";
 import "./App.css";
 import "./styles.css";
 import { useReducer } from "react";
@@ -33,7 +33,7 @@ function App() {
 
             <select
               value={state.sortPreference}
-              onChange={(e) =>
+              onChange={e =>
                 dispatch({ type: "SET_SORTING", payload: e.target.value })
               }
             >

@@ -1,25 +1,12 @@
-import { type } from "@testing-library/user-event/dist/type";
 import React, { useState, useEffect } from "react";
-
-export default function TicketForm({ dispatch, editingTicket }) {
+export default function TicketForm({ dispatch }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [priority, setPriority] = useState("1");
-
-  useEffect(() => {
-    if (editingTicket) {
-      setTitle(editingTicket.title);
-      setDescription(editingTicket.description);
-      setPriority(editingTicket.priority);
-    } else {
-      clearForm();
-    }
-  }, [editingTicket]);
-
-  const priorityLabels = {
-    1: "Low",
+  const priorityLable = {
+    1: "High",
     2: "Medium",
-    3: "High",
+    3: "Low",
   };
 
   const clearForm = () => {
@@ -28,76 +15,57 @@ export default function TicketForm({ dispatch, editingTicket }) {
     setPriority("1");
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = e => {
+    //deniying defaut behaviour reloading  when form submitted
     e.preventDefault();
-
-    const ticketData = {
-      id: editingTicket ? editingTicket.id : new Date().toISOString(),
+    const formValues = {
+      id: new Date().toISOString(),
       title,
       description,
       priority,
     };
-
-    dispatch({
-      type: editingTicket ? "UPDATE_TICKET" : "ADD_TICKET",
-      payload: ticketData,
-    });
-
+    dispatch({ type: "ADD_TICKET", payload: formValues });
+    console.table(formValues);
     clearForm();
   };
-
-  const handleCancel = () => {
-    dispatch({ type: "CLEAR_EDITING_TICKET" });
-    clearForm();
-  };
-
   return (
     <form onSubmit={handleSubmit} className="ticket-form">
       <div>
         <label>Title</label>
         <input
           type="text"
-          value={title}
           className="form-input"
-          onChange={(e) => setTitle(e.target.value)}
-        ></input>
+          value={title}
+          onChange={e => setTitle(e.target.value)}
+        />
       </div>
       <div>
         <label>Description</label>
         <textarea
           type="text"
-          value={description}
           className="form-input"
-          onChange={(e) => setDescription(e.target.value)}
-        ></textarea>
+          value={description}
+          onChange={e => setDescription(e.target.value)}
+        />
       </div>
-
       <fieldset className="priority-fieldset">
-        <legend>Priority</legend>
-
-        {Object.entries(priorityLabels).map(([value, label]) => (
+        <legend>priority</legend>
+        {Object.entries(priorityLable).map(([value, label]) => (
           <label key={value} className="priority-label">
             <input
               type="radio"
               value={value}
               checked={priority === value}
-              className="priority-input"
-              onChange={(e) => setPriority(e.target.value)}
-            ></input>
+              className="prioriry-input"
+              onChange={e => setPriority(e.target.value)}
+            />
             {label}
           </label>
         ))}
       </fieldset>
-
       <button type="submit" className="button">
         Submit
       </button>
-
-      {editingTicket && (
-        <button className="button" onClick={handleCancel}>
-          Cancel Edit
-        </button>
-      )}
     </form>
   );
 }
